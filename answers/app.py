@@ -1,9 +1,14 @@
-"""
-Corteva Coding Exercise
+#!/usr/bin/env python
 
-CREATED BY: Jesse Fimbres
-LAST MODIFIED: 12/29/2022
 """
+Module for running Flask server.
+
+This module initializes a Flask server and handles requests to the endpoints
+for weather, yield and stats.
+"""
+
+__author__ = "Jesse Fimbres"
+__date__ = "01/02/2023"
 
 from flask import abort, Flask, request, jsonify
 

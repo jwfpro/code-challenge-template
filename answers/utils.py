@@ -1,22 +1,29 @@
-"""
-Corteva Coding Exercise
+#!/usr/bin/env python
 
-CREATED BY: Jesse Fimbres
-LAST MODIFIED: 12/29/2022
 """
+Module for Postgres connection and SQL queries.
+"""
+
+__author__ = "Jesse Fimbres"
+__date__ = "01/02/2023"
+
+
+import configparser
 
 import psycopg2
 import psycopg2.extras
 
-from pg_config import db_creds
+config = configparser.ConfigParser()
+config.read('config.ini')
 
 def db_connect():
     """
     Connects to Postgres db through psycopg2
     Returns: psycopg2 connection object
     """
-    pg_conn = psycopg2.connect(user=db_creds['USERNAME'],password=db_creds['PASSWORD'],\
-        host=db_creds['HOST'],port=db_creds['PORT'],dbname=db_creds['DATABASE'])
+    pg_conn = psycopg2.connect(user=config['postgres']['USERNAME'], \
+        password=config['postgres']['PASSWORD'],host=config['postgres']['HOST'], \
+        port=config['postgres']['PORT'],dbname=config['postgres']['DATABASE'])
     return pg_conn
 
 def generate_where_clause(where_lst):

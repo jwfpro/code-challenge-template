@@ -1,9 +1,16 @@
-"""
-Corteva Coding Exercise
+#!/usr/bin/env python
 
-CREATED BY: Jesse Fimbres
-LAST MODIFIED: 12/29/2022
 """
+Module for ingesting csv data to Postgres.
+
+This module contains the IngestionBackend class which handles preprocessing of 
+csv files, creates any required schemas or tables to house the data, then uploads
+to the Postgres DB and performs some stats analysis.
+"""
+
+__author__ = "Jesse Fimbres"
+__date__ = "01/02/2023"
+
 
 import io
 import time
@@ -66,11 +73,15 @@ class IngestionBackend():
 
     def create_table(self,table,query):
         """
-        Creates table in Postgres if not exists
+        Creates schema and table in Postgres if not exists
         """
-        logging.info(f'Creating table (if not exists): {self.schema}.{table}')
+        logging.info(f'Creating schema (if not exists): {self.schema}')
         session = db_connect()
         cur = session.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
+
+        cur.execute(f'CREATE SCHEMA IF NOT EXISTS {self.schema}')
+
+        logging.info(f'Creating table (if not exists): {self.schema}.{table}')
 
         cur.execute(query)
         session.commit()
@@ -151,7 +162,8 @@ class IngestionBackend():
             {self.schema}.{self.table}
         GROUP BY
             STATION_ID,
-            EXTRACT(YEAR FROM DATE);
+            EXTRACT(YEAR FROM DATE)
+        ON CONFLICT DO NOTHING;
         '''
         cur.execute(query)
         session.commit()

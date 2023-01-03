@@ -1,9 +1,15 @@
-"""
-Corteva Coding Exercise
+#!/usr/bin/env python
 
-CREATED BY: Jesse Fimbres
-LAST MODIFIED: 12/29/2022
 """
+Module for running app unit tests.
+
+This module conains the TestAPI class which contains unit tests for the Flask
+endpoints, including response success, count, and pagination. 
+"""
+
+__author__ = "Jesse Fimbres"
+__date__ = "01/02/2023"
+
 
 import json
 import unittest

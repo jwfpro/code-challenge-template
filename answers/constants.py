@@ -1,6 +1,13 @@
+#!/usr/bin/env python
+
 """
-Project Constants
+Module for project constants.
 """
+
+__author__ = "Jesse Fimbres"
+__date__ = "01/02/2023"
+
+
 from pathlib import Path
 import os
 

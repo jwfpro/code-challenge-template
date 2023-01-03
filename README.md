@@ -1,58 +1,64 @@
 # Corteva Code Challenge: Weather and Grain Yield APIs
 
-Get Started
-
-Requirements:
-python3, pip3, postgres
-
+## Project Overview
+This is a small application for writing csv data from the wx_data (weather) and yld_data (US grain yield) directories to a Postgres database, creating a stats table from the weather data, and retrieving inserted data through API endpoints powered by Flask.
 
 The code can be found in the answers directory. It is split up into two components: 
 1. Ingestion (ingestion.py):
-	Converts the csv files to Pandas DataFrames
-	Concatenates the DataFrames and adds headers
-	Creates any new tables in Postgres DB
-	Converts DataFrames into new csv files (in memory)
-	Writes csv files to Postgres DB
+	* Converts the csv files to Pandas DataFrames
+	* Concatenates the DataFrames and adds headers
+	* Creates any new tables in Postgres DB
+	* Converts DataFrames into new csv files (in memory)
+	* Writes csv files to Postgres DB
 2. API Server (app.py)
-	Launches Flask server
-	Routes for weather, yield, or stats data
-	Queries Postgres DB with query params
-	Paginates data
-	Returns JSON response
+	* Launches Flask server
+	* Routes for weather, yield, or stats data
+	* Queries Postgres DB with query params
+	* Paginates data
+	* Returns JSON response
 
 There are 4 other helper files:
-1) utils.py: generalizable helper functions
-2) constants.py: constants used by the program
-3) db_config.py: Postgres connection info
-4) unit_tests.py: Some simple unit tests
+* utils.py: generalizable helper functions
+* constants.py: constants used by the program
+* db_config.py: Postgres connection info
+* unit_tests.py: Some simple unit tests
+
+## Get Started
+
+### Requirements:
+python3, pip3, postgres
 
 ```
 pip3 install -r requirements.txt
 ```
 
-To ingest data into your postgres server:
+### Ingest data into your Postgres DB:
 
 Insert your db credentials into db_config.py
-
+```
 python3 ingestion.py
-
-Once data is successfully inserted (logged around 16000 ms on my machine) start the flask server:
-
+```
+Logs will show the current execution step, the number of rows added to the DB, and the total execution time (logged around 16000 ms on my machine).
+### Start the Flask server:
+```
 python3 app.py
-
+```
 It should be running on the default http://127.0.0.1:5000, as displayed in the terminal window.
-
 Use Postman or the browser of your choice to send requests to the 3 API endpoints:
-
-/api/weather [filters: date, station_id]
-/api/yield [filters: year]
-/api/weater/stats [filters: year, station_id]
+* /api/weather [filters: date, station_id]
+* /api/yield [filters: year]
+* /api/weater/stats [filters: year, station_id]
 
 For each there will be a JSON response that can be filtered by query params, shown respectively for each endpoint above. If an offset and limit are not specified as query params, the defaults in the app.py file will be used.
 
+To run the unit tests for app.py:
+```
+python3 -m unittest unit_tests.TestAPI
+```
 
 
-Additional Notes:
+
+## Additional Notes
 
 1) I chose to go with a Pandas DataFrame solution for manipulating the csv data before insert, although the vast majority of the runtime stems from Postgres' native "COPY" solution for reading csv files (which was significantly faster than Pandas' equivalent to_sql). While a faster implementation may be built leveraging PySpark for parallel processing, this solution would still be based on the "COPY" command utility.
 

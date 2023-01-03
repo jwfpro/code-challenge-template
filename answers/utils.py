@@ -33,6 +33,7 @@ def generate_where_clause(where_lst):
     """
     where_lst = [x for x in where_lst if x[1] is not None]
 
+    # adjusts query based on num of params
     if len(where_lst) == 0:
         return str()
     str_temp = f" WHERE {where_lst[0][0]} = '{where_lst[0][1]}'"

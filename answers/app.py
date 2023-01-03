@@ -90,6 +90,7 @@ def get_payload(schema,table,where_clause,bounds_dict):
     bounds_dict['count'] = count
 
     url = request.base_url
+    # get only non-pagination query params
     query = request.query_string.decode()
     head = query.partition('offset')[0]
     if len(head) > 0 and head[-1] == '&':

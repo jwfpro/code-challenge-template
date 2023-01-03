@@ -49,10 +49,12 @@ class IngestionBackend():
         keys,data_dir,data_cols = (['FILE','DATE'],const.WX_DATA,const.WX_COLS) if data_is_wx \
         else (['YEAR'],const.YLD_DATA,const.YLD_COLS)
 
+        # concatenate all csvs in dir into df
         file_list = [file for file in os.listdir(data_dir) if file.endswith('.txt')]
         df = pd.concat([self.ingest_data_helper(file,data_dir,data_cols) for file in file_list])
         df = df.drop_duplicates(keys)
 
+        # only keep filename for wx_data, rename
         if data_is_wx:
             df.rename(columns={'FILE':'STATION_ID'}, inplace=True)
             df['DATE'] = pd.to_datetime(df['DATE'].astype(str), format='%Y%m%d')
@@ -100,6 +102,7 @@ class IngestionBackend():
         cur.execute(f'SELECT COUNT(*) FROM {self.schema}.{self.table}')
         prev_count = cur.fetchone()['count']
 
+        # store new csv in memory and insert
         buffer = io.StringIO()
         df.to_csv(buffer, index=False, date_format='%Y-%m-%d')
         buffer.seek(0)
@@ -197,6 +200,7 @@ if __name__ == '__main__':
     );
     '''
 
+    # Ingestion objects for wx,yld,avg
     Ingestion_Obj_WX = IngestionBackend(const.WX_SCHEMA,const.WX_TABLE)
     Ingestion_Obj_WX.ingest_data(query_wx)
 

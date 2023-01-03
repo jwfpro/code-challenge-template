@@ -20,7 +20,7 @@ The code can be found in the answers directory. It is split up into two componen
 There are 4 other helper files:
 * utils.py: generalizable helper functions
 * constants.py: constants used by the program
-* db_config.py: Postgres connection info
+* config.ini: Postgres connection info
 * unit_tests.py: Some simple unit tests
 
 ## Get Started
@@ -34,7 +34,7 @@ pip3 install -r requirements.txt
 
 ### Ingest data into your Postgres DB:
 
-Insert your db credentials into db_config.py
+Insert your db credentials into config.ini
 ```
 python3 ingestion.py
 ```
